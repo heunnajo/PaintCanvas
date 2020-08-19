@@ -1,6 +1,6 @@
 const canvas = document.getElementById("jsCanvas");
-const ctx = canvas.getContext("2d");
-
+const ctx = canvas.getContext("2d");//what is context of the canvas? I guess it means what controls the pixels inside of it.
+//should give pixel modifier, let it knows how big the pixel of window manipulation
 canvas.width = 700;
 canvas.height = 700;
 
@@ -22,18 +22,33 @@ function onMouseMove(event){
     const x = event.offsetX;
     const y = event.offsetY;
     
-    if(!painting) {//if I am not painting
-        ctx.beginPath();//Starts a new path??? by emptying the list of sub-paths. Call this method when you want to create a new path.
-        ctx.moveTo(x,y);//Moves the starting point of a new sub-path to the (x,y) coordinates
-    } else {//if I am painting
-        ctx.lineTo(x,y);//Connects the last point in the current sub-path to the specified (x,y) coordinates with a straight line.
+    if(!painting) {//painting is false which means not painting
+        /*
+        PATH IS LINE!
+        it means everytime moving a mouse on canvas, starting point of the path is where my mouse is.
+        and the paths is being created but none of them will be used!
+
+        console.log("creating path in ", x, y);
+
+        some methods regarding html element canvas
+        beginPath() : Create one path.Starts a new path??? by emptying the list of sub-paths. Call this method when you want to create a new path.
+        moveTo(x,y) : Move the path.Moves the starting point of a new sub-path to the (x,y) coordinates
+        lineTo(x,y) : Connects the last point in the current sub-path to the specified (x,y) coordinates WITH A STRAIGHT LINE.
+        stroke() : make stroke like outline.
+        */
+        ctx.beginPath();
+        ctx.moveTo(x,y);
+    } else {//painting is true which means painting. when you click, dont create any more path.just use one path and make it line. everytime I move the mouse!
+        //it is same one path as above(in if statement)
+        console.log("creating line in ", x, y);
+        ctx.lineTo(x,y);
         ctx.stroke();
     }
 }
-
+//the starting and ending point of line does not means as starting point and ending point
 function onMouseDown(event){
     //console.log(event);
-    painting = true;//when mouse clicks, painting comes true.
+    painting = true;
 }
 
 /*function onMouseUp(event){ this logic should go into onMouseDown.
