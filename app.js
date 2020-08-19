@@ -1,4 +1,8 @@
 const canvas = document.getElementById("jsCanvas");
+const ctx = canvas.getContext("2d");
+
+ctx.strokeStyle = "#2c2c2c";
+ctx.lineWidth = 2.5;
 
 let painting = false;
 
@@ -6,30 +10,41 @@ function stopPainting(){
     painting = false;
 }
 
+function startPainting(){
+    painting = true;
+}
+
 function onMouseMove(event){
-    //console.log(event);캔버스 위에 마우스가 있을 때 위치값 로그로 출력.
+    //console.log(event);when mouse is on the canvas, log offsetX and offsetY of the mouse
     const x = event.offsetX;
     const y = event.offsetY;
     //console.log(x,y);
+    if(!painting) {//if I am not painting
+        ctx.beginPath();//Starts a new path by emptying the list of sub-paths. Call this method when you want to create a new path.
+        ctx.moveTo(x,y);//Moves the starting point of a new sub-path to the (x,y) coordinates
+    } else {
+        ctx.lineTo(x,y);//Connects the last point in the current sub-path to the specified (x,y) coordinates with a straight line.
+    }
 }
 
 function onMouseDown(event){
     //console.log(event);
-    painting = true;//마우스를 클릭하면 painting은 true로 바꾼다.
+    painting = true;//when mouse clicks, painting comes true.
 }
 
-function onMouseUp(event){
+/*function onMouseUp(event){ this logic should go into onMouseDown.
     stopPainting();
-}
+}*/
 
-
+//when mouse clicks, we care the startpoint and endpoint of it.
+//when we click, we are going to make a line from the starting point to where we're clicking(releasing)
 if(canvas){
-    //동작1. 캔버스 위에서 마우스의 위치를 생각.
+    //event1. when mouse moves on the canvas.
     canvas.addEventListener("mousemove", onMouseMove);
-    //동작2. 캔버스 위에서 마우스가 클릭했을 때 페인팅을 시작!
-    canvas.addEventListener("mousedown",onMouseDown);//mousedown은 클릭했을 때를 의미한다!
-    //동작3. 캔버스 위에서 클릭하다가 뗐을 때 페인팅을 종료!
-    canvas.addEventListener("mouseup",onMouseUp);//mouseup은 클릭했다가 뗐을 때를 의미한다!
-    //동작4. 캔버스 위에서 페인팅하다가 캔버스를 벗어나도 페인팅을 종료!
+    //event2. when mouse clicks on the canvas
+    canvas.addEventListener("mousedown",startPainting);
+    //event3. when mouse clkicks and releases clicking, stop painting
+    canvas.addEventListener("mouseup",stopPainting);
+    //event4. when mouse leaves the canvas, stop painting
     canvas.addEventListener("mouseleave",stopPainting);
 }
