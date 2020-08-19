@@ -1,6 +1,9 @@
 const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d");
 
+canvas.width = 700;
+canvas.height = 700;
+
 ctx.strokeStyle = "#2c2c2c";
 ctx.lineWidth = 2.5;
 
@@ -15,15 +18,16 @@ function startPainting(){
 }
 
 function onMouseMove(event){
-    //console.log(event);when mouse is on the canvas, log offsetX and offsetY of the mouse
+    //console.log(x,y); when mouse is on the canvas, log offsetX and offsetY of the mouse
     const x = event.offsetX;
     const y = event.offsetY;
-    //console.log(x,y);
+    
     if(!painting) {//if I am not painting
-        ctx.beginPath();//Starts a new path by emptying the list of sub-paths. Call this method when you want to create a new path.
+        ctx.beginPath();//Starts a new path??? by emptying the list of sub-paths. Call this method when you want to create a new path.
         ctx.moveTo(x,y);//Moves the starting point of a new sub-path to the (x,y) coordinates
-    } else {
+    } else {//if I am painting
         ctx.lineTo(x,y);//Connects the last point in the current sub-path to the specified (x,y) coordinates with a straight line.
+        ctx.stroke();
     }
 }
 
