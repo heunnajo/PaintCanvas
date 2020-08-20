@@ -3,6 +3,7 @@ const ctx = canvas.getContext("2d");//what is context of the canvas? I guess it 
 const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
+const saveBtn = document.getElementById("jsSave");
 
 const INITIAL_COLOR = "2c2c2c";
 const CANVAS_SIZE = 700;
@@ -11,8 +12,10 @@ const CANVAS_SIZE = 700;
 canvas.width = CANVAS_SIZE;
 canvas.height = CANVAS_SIZE;
 
+
+ctx.fillStyle = "white";
+ctx.fillRect(0,0,CANVAS_SIZE, CANVAS_SIZE);
 ctx.strokeStyle = INITIAL_COLOR;
-ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5;
 
 let painting = false;
@@ -86,6 +89,21 @@ function handleCanvasClick() {
     }
 
 }
+
+function handleCM(event) {
+    //console.log(event);
+    event.preventDefault();
+}
+
+function handleSaveClick() {
+    //first, get canvas data as image.
+    const image = canvas.toDataURL();
+    //console.log(image);
+    const link = document.createElement("a");
+    link.href = image;//"download" is an attribute of anchor, a tag
+    link.download = "PaintJS[EXPORT]👩🏻‍🎨"
+    link.click();
+}
 //when we click, we are going to make a line from the starting point to where we're clicking(releasing)
 if(canvas){
     //event1. when mouse moves on the canvas.
@@ -98,6 +116,8 @@ if(canvas){
     canvas.addEventListener("mouseleave",stopPainting);
     //event5. when click the fill button
     canvas.addEventListener("click", handleCanvasClick);
+    //when you press right button of mouse it is called "contextmenu"
+    canvas.addEventListener("contextmenu", handleCM);
 }
 //"potato" represents each item inside of array.
 Array.from(colors).forEach(potato => 
@@ -110,4 +130,8 @@ if(range){
 
 if(mode) {
     mode.addEventListener("click",handleModeClick)
+}
+
+if(saveBtn) {
+    saveBtn.addEventListener("click",handleSaveClick);
 }
