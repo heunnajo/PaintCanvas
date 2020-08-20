@@ -1,5 +1,9 @@
 const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d");//what is context of the canvas? I guess it means what controls the pixels inside of it.
+const colors = document.getElementsByClassName("jsColor");
+const range = document.getElementById("jsRange");
+const mode = document.getElementById("jsMode");
+
 //should give pixel modifier, let it knows how big the pixel of window manipulation
 canvas.width = 700;
 canvas.height = 700;
@@ -8,6 +12,7 @@ ctx.strokeStyle = "#2c2c2c";
 ctx.lineWidth = 2.5;
 
 let painting = false;
+let filling = false;
 
 function stopPainting(){
     painting = false;
@@ -45,17 +50,28 @@ function onMouseMove(event){
         ctx.stroke();
     }
 }
-//the starting and ending point of line does not means as starting point and ending point
-function onMouseDown(event){
-    //console.log(event);
-    painting = true;
+//when you click the color button, the color changes.
+function handleColorClick(event) {
+    //when click the color, log shows its RGB color value
+    const color = event.target.style.backgroundColor;
+    console.log(color);
+    ctx.strokeStyle = color;//set strokeStyle color as what you choose
+} 
+
+function handleRangeChange(event) {
+    const size = event.target.value;
+    ctx.lineWidth = size;
 }
 
-/*function onMouseUp(event){ this logic should go into onMouseDown.
-    stopPainting();
-}*/
-
-//when mouse clicks, we care the startpoint and endpoint of it.
+function handleModeClick(event) {
+    if(filling === true) {
+        filling = false;
+        mode.innerText = "Fill"
+    } else {
+        filling = true;
+        mode.innerText = "Paint";
+    }
+}
 //when we click, we are going to make a line from the starting point to where we're clicking(releasing)
 if(canvas){
     //event1. when mouse moves on the canvas.
@@ -66,4 +82,16 @@ if(canvas){
     canvas.addEventListener("mouseup",stopPainting);
     //event4. when mouse leaves the canvas, stop painting
     canvas.addEventListener("mouseleave",stopPainting);
+}
+//"potato" represents each item inside of array.
+Array.from(colors).forEach(potato => 
+    potato.addEventListener("click", handleColorClick)
+);
+
+if(range){
+    range.addEventListener("input",handleRangeChange)
+}
+
+if(mode) {
+    mode.addEventListener("click",handleModeClick)
 }
