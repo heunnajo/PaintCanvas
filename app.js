@@ -4,11 +4,15 @@ const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 
-//should give pixel modifier, let it knows how big the pixel of window manipulation
-canvas.width = 700;
-canvas.height = 700;
+const INITIAL_COLOR = "2c2c2c";
+const CANVAS_SIZE = 700;
 
-ctx.strokeStyle = "#2c2c2c";
+//should give pixel modifier, let it knows how big the pixel of window manipulation
+canvas.width = CANVAS_SIZE;
+canvas.height = CANVAS_SIZE;
+
+ctx.strokeStyle = INITIAL_COLOR;
+ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5;
 
 let painting = false;
@@ -56,11 +60,13 @@ function handleColorClick(event) {
     const color = event.target.style.backgroundColor;
     console.log(color);
     ctx.strokeStyle = color;//set strokeStyle color as what you choose
+    ctx.fillSttyle = color;
 } 
 
 function handleRangeChange(event) {
     const size = event.target.value;
     ctx.lineWidth = size;
+    
 }
 
 function handleModeClick(event) {
@@ -70,7 +76,15 @@ function handleModeClick(event) {
     } else {
         filling = true;
         mode.innerText = "Paint";
+        ctx.fillStyle = ctx.strokeStyle;
     }
+}
+
+function handleCanvasClick() {
+    if(filling) {//only when filling is true
+        ctx.fillRect(0,0,CANVAS_SIZE,CANVAS_SIZE);// == ctx.fillRect(0,0,canvas.width,canvas.height);
+    }
+
 }
 //when we click, we are going to make a line from the starting point to where we're clicking(releasing)
 if(canvas){
@@ -82,6 +96,8 @@ if(canvas){
     canvas.addEventListener("mouseup",stopPainting);
     //event4. when mouse leaves the canvas, stop painting
     canvas.addEventListener("mouseleave",stopPainting);
+    //event5. when click the fill button
+    canvas.addEventListener("click", handleCanvasClick);
 }
 //"potato" represents each item inside of array.
 Array.from(colors).forEach(potato => 
